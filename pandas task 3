@@ -1,0 +1,16 @@
+import pandas as pd
+
+html_tables = pd.read_html('https://www.premierleague.com/stats/top/players/goals?se=-1')
+type(html_tables)
+
+len(html_tables)
+
+type(html_tables[0])
+
+NBA_players_df = html_tables[0]
+NBA_players_df.head()
+
+del NBA_players_df["Unnamed: 5"]
+
+NBA_players_df.head()
+
