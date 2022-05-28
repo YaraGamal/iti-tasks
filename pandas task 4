@@ -1,0 +1,11 @@
+!pip install --upgrade pandas --user
+
+import pandas as pd
+
+menu_df = pd.read_xml('breakfast_menu.xml')
+menu_df.info()
+
+menu_df.head()
+
+menu_df.to_csv("menu.csv",index=False,sep=";")
+
