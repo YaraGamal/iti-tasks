@@ -1,0 +1,14 @@
+import pandas as pd
+import numpy as np
+
+csvDF = pd.read_csv('Top_Scorers_dataset.csv')
+csvDF.info()
+csvDF.head(10)
+
+jsonDF = pd.read_json('players_stats.json')
+jsonDF.head(7)
+
+inner_joined_df = pd.merge(csvDF,jsonDF , on='Name', how='inner')
+inner_joined_df
+
+inner_joined_df.plot(x="Appearances", y="Goals", kind="scatter")
