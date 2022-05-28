@@ -1,0 +1,62 @@
+!pip install category_encoders
+
+import pandas as pd
+import matplotlib.pyplot as plt 
+import category_encoders as ce
+csvDF = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv')
+csvDF.info()
+csvDF.head(10)
+
+csvDF.set_index('customerID',inplace=True)
+csvDF.head()
+csvDF.info()
+
+csvDF.drop_duplicates(inplace=True)
+csvDF['TotalCharges'] = pd.to_numeric(csvDF['TotalCharges'], errors='coerce')
+
+mean=csvDF['TotalCharges'].mean()
+csvDF.fillna({'TotalCharges':mean}, inplace=True)
+
+csvDF.info()
+binaryEncoder = ce.BinaryEncoder()
+dfb=binaryEncoder.fit_transform(csvDF[['gender','SeniorCitizen','Partner','Dependents','PhoneService','MultipleLines','InternetService','OnlineSecurity','OnlineBackup','DeviceProtection','TechSupport','StreamingTV','StreamingMovies','PaperlessBilling','PaymentMethod']])
+csvDF=pd.concat([dfb, csvDF],axis=1)
+
+del csvDF['gender']
+del  csvDF['SeniorCitizen']
+del  csvDF['Partner']
+del  csvDF['Dependents']
+del  csvDF['PhoneService']
+del  csvDF['MultipleLines']
+del  csvDF['InternetService']
+del  csvDF['OnlineSecurity']
+del  csvDF['OnlineBackup']
+del  csvDF['DeviceProtection']
+del  csvDF['TechSupport']
+del  csvDF['StreamingTV']
+del  csvDF['StreamingMovies']
+del  csvDF['PaperlessBilling']
+del  csvDF['PaymentMethod']
+
+csvDF.head()
+
+csvDF["Contract"].replace({"Month-to-month": "1", "One year": "2", "Two year" : "3"}, inplace=True)
+csvDF.head()
+
+csvDF["Churn"].replace({"No": "0", "Yes": "1"}, inplace=True)
+csvDF.head()
+
+csvDF['Churn'] = pd.to_numeric(csvDF['Churn'], errors='coerce')
+df=pd.DataFrame(csvDF['Churn'])
+df
+
+del csvDF['Churn']
+def normalize(data):
+    return (data - data.min()) / (data.max() - data.min())
+    
+    csvDF['MonthlyCharges']=normalize(csvDF['MonthlyCharges'])
+csvDF['tenure']=normalize(csvDF['tenure'])
+csvDF['TotalCharges']=normalize(csvDF['TotalCharges'])
+csvDF.head(20)
+
+csvDF.to_csv('MyData.csv')
