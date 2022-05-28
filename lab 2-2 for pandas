@@ -1,0 +1,17 @@
+import pandas as pd
+import numpy as np
+
+csvDF = pd.read_csv('epldata_final.csv')
+csvDF.info()
+csvDF.head(10)
+
+csvDF.groupby('club')
+new=csvDF.groupby(['club'])['age'].mean()
+new
+new2=csvDF.groupby(['club'])['market_value'].mean()
+new2
+g=pd.DataFrame(list(zip(new.index,new2, new2)),
+                  columns=['club','age','market value'])
+g
+import json
+result = g.to_json('club.json')
