@@ -1,0 +1,23 @@
+import pandas as pd
+
+
+!pip install psycopg2
+
+import psycopg2
+params_dic = {
+    "host"      : "localhost",
+    "database"  : "postgres",
+    "user"      : "postgres",
+    "password"  : "123456"
+}
+
+conn = psycopg2.connect(**params_dic)
+cursor1 = conn.cursor()
+
+
+cursor1.execute('select company_name,city, country,count(order_id)as orders_number from customers c left join orders o on c.customer_id =o.customer_id group by company_name, city, country')
+
+df = pd.DataFrame(cursor1.fetchall(),columns=['company_name','city','country','count']) 
+df
+
+
