@@ -1,0 +1,30 @@
+import pandas as pd
+
+
+import json
+import requests
+
+url = "https://community-open-weather-map.p.rapidapi.com/climate/month"
+
+querystring = {"q":"Cairo"}
+
+headers = {
+    'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com",
+    'x-rapidapi-key': "747d0bde01msh1ba04d95e222d4fp1292bfjsn1b1c95f0577c"
+    }
+
+response = requests.request("GET", url, headers=headers, params=querystring)
+
+print(response.text)
+
+
+
+df=pd.DataFrame(json.loads(response.text)['list'])
+
+df.head()
+
+df = pd.concat([df, pd.json_normalize(df['temp'])], axis=1)
+df = df.rename(columns={'dt': 'dt','humidity': 'humidity' ,'pressure': 'pressure'})
+df.head(2)
+
+
